@@ -161,18 +161,23 @@ class Room2(Room):
     def __init__(self):
         Room.__init__(self)
 
-        walls = [[0,420,300,10,GRAY], #Horizontal
-                 [300,420,10,90,GRAY], #Vertical
-                 [400,420,240,10,GRAY],
-                 [400,330,10,90,GRAY],
-                 [90,330,310,10,GRAY],
-                 [0,240,510,10,GRAY],
-                 [510,150,10,100,GRAY],
-                 [110,150,305,10,GRAY],
-                 [405,60,10,90,GRAY],
-                 [405,60,235,10,GRAY],
-                 [0,60,310,10,GRAY],
-                 [410,300,230,120,GRAY]
+        walls = [[0,90,280,10,GRAY], #Horizontal
+                 [350,90,200,10,GRAY],
+                 [0,180,400,10,GRAY],
+                 [490,180,220,10,GRAY],
+                 [0,270,350,10,GRAY],
+                 [410,270,250,10,GRAY],
+                 [90,360,580,10,GRAY],
+                 [400,90,10,270,GRAY],
+                 [490,320,5,40,BLUEB], 
+                 [550,320,5,40,BLUEB], 
+                 [522,280,5,40,BLUEB],   
+                 [0,280,40,240,BLUEB], 
+                 [80,360,15,70,BLUEB],
+                 [0,470,640,10,BLUEB],
+                 [200,400,60,40,WHITE],   
+                 [300,400,60,40,WHITE], 
+                 [400,400,60,40,WHITE]           
                 ]
 
         for item in walls:
@@ -449,12 +454,16 @@ while run:
             
         elif(current_room_no == 1):
             screen.blit(background_image2, background_position)
-            screen.blit(puerta2, [0,0])
-            screen.blit(puerta2, [590,0])
-            screen.blit(puerta2, [0,430])
-            screen.blit(puerta2, [250,430])
-            screen.blit(puerta2, [0,180])
-            screen.blit(puerta2, [590,430])
+            screen.blit(puerta2, [0,30])
+            screen.blit(puerta2, [0,120])
+            screen.blit(puerta2, [0,210])
+            screen.blit(puerta2, [590,210])
+            screen.blit(puerta2, [590,300])
+            screen.blit(puerta2, [410,300])
+            screen.blit(puerta2, [590,370])
+            screen.blit(puerta2, [540,370])
+
+
 
     
         movingsprites.draw(screen)
