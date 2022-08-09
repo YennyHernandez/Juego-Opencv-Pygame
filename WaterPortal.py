@@ -312,11 +312,6 @@ screen = pygame.display.set_mode([640, 480])
 # titulo de la ventana
 pygame.display.set_caption('WATER PORTAL')
 
-# Creacion y llamada del jugador
-player = Player(145, 450)
-movingsprites = pygame.sprite.Group()
-movingsprites.add(player)
-
 # posicion de la grafica
 background_position = [0, 0]
 
@@ -337,11 +332,12 @@ font = pygame.font.SysFont("monospace", 24)
 text = font.render("Vidas: "+ str(vidas), True, (0, 255, 0))
 
 #--------------------------------------------------------------------------
-#------- Correr el juego --------------------------------------------------
+#------- Logica para correr el juego --------------------------------------------------
 #--------------------------------------------------------------------------
 
 while run:
     """ Main Program """
+    
     #Arranca el juego.
     rooms = []
 
@@ -354,8 +350,17 @@ while run:
     room = Room3()
     rooms.append(room)
 
-    current_room_no = 1
+    current_room_no = 0
     current_room = rooms[current_room_no]
+    
+    # Creacion y llamada del jugador 
+    if(current_room_no == 0):
+        player = Player(145, 450)
+    if(current_room_no == 1):
+        player = Player(10, 10)
+
+    movingsprites = pygame.sprite.Group()
+    movingsprites.add(player)
 
     clock = pygame.time.Clock()
 
@@ -367,22 +372,114 @@ while run:
         
         # Lee la posicion del color a mostrar
         red_validation_x, red_validation_y = color_capture(cap, higher_red, lower_red, 0,0) # Detecting the red object
-
-        #Da inicio de arranque en cada nivel (Mi objeto debe estar en esas posiciones para iniciar)
-        if( num_puerta == 0 and red_validation_x>100 and red_validation_x<180 and red_validation_y>40 and red_validation_y<470): 
-            play = True
-
-        if(num_puerta == 1 and red_validation_x>45 and red_validation_x<100 and red_validation_y>200 and red_validation_y<300): 
-            play = True
-
-        if(num_puerta == 2 and red_validation_x>480 and red_validation_x<600 and red_validation_y>400 and red_validation_y<450): 
-            play = True
-        if(num_puerta == 3 and red_validation_x>0 and red_validation_x<20 and red_validation_y>0 and red_validation_y<20): 
-            play = True
         
-        
+        if(current_room_no == 0): #-------------------------------------------------------------------------------
+        #Da inicio de arranque al nivel 1 (Mi objeto debe estar en esas posiciones para moverse por los portales)
+            if( num_puerta == 0 and red_validation_x>100 and red_validation_x<180 and red_validation_y>40 and red_validation_y<470): 
+                play = True
+
+            if(num_puerta == 1 and red_validation_x>45 and red_validation_x<100 and red_validation_y>200 and red_validation_y<300): 
+                play = True
+
+            if(num_puerta == 2 and red_validation_x>480 and red_validation_x<600 and red_validation_y>400 and red_validation_y<450): 
+                play = True
+                   
+            #cambio de posicion si se toma el portal amarillo puerta 1.
+            if player.rect.x < 45 and player.rect.y > 430:
+                player.rect.x = 0;
+                player.rect.y = 200;
+                play = False
+                num_puerta = 1
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+                
+
+            #cambio de posicion si se toma el portal rosado puerta 2.
+            if player.rect.x > 230 and  player.rect.x < 300 and player.rect.y > 410:
+                player.rect.x = 550;
+                player.rect.y = 450;
+                play = False
+                num_puerta = 2
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+
+            #cambio de posicion si se toma el portal rosado puerta 3 vuelve al inicio.
+            if player.rect.x < 10  and player.rect.y < 10:
+                player.rect.x = 145;
+                player.rect.y = 450;
+                play = False
+                num_puerta = 0
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+
+            #cambio de nivel
+            if player.rect.x > 550 and player.rect.y <60 :
+                if current_room_no == 0:
+                    current_room_no = 1
+                    current_room = rooms[current_room_no]
+                    player.rect.x = 10
+                    player.rect.y = 10
+                    play = False
+                    num_puerta = 3
+
+            #NIVEL 1: NUM_PUERTA 0(INICIO),1,2
+            #NIVEL 2: NUM_PUERTA 3(INICIO),4,5
+
+        if(current_room_no == 1): #----------------------------------------------------------------------------
+        #Da inicio de arranque al nivel 2 (Mi objeto debe estar en esas posiciones para moverse por los portales)
             
-        if(play):
+            #inicio del movimiento del nivel 2
+            if(num_puerta == 3 and red_validation_x>0 and red_validation_x<70 and red_validation_y>0 and red_validation_y<70): 
+                play = True
+
+
+            if(num_puerta == 4 and red_validation_x>540  and red_validation_y>280 and red_validation_y<340): 
+                play = True
+            
+            if(num_puerta == 5 and red_validation_x<50 and red_validation_y>200 and red_validation_y<250): 
+                play = True
+
+            #cambio de posicion si se toma el portal rosado
+            if player.rect.x < 45 and player.rect.y > 110 and player.rect.y < 170:
+                player.rect.x = 550;
+                player.rect.y = 300;
+                play = False
+                num_puerta = 4
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+                
+
+            #cambio de posicion si se toma el portal amarillo 2.
+            if player.rect.x > 420 and  player.rect.x < 440 and player.rect.y > 290 and player.rect.y < 340:
+                player.rect.x = 10;
+                player.rect.y = 200;
+                play = False
+                num_puerta = 5
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+
+            #cambio de posicion si se toma el portal amarillo 1.
+            if player.rect.x > 550 and player.rect.y > 200 and player.rect.y < 250:
+                player.rect.x = 10; #10
+                player.rect.y = 200; #200
+                play = False
+                num_puerta = 5
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+            
+            #cambio de posicion si se toma el portal rojo.
+            if player.rect.x > 500 and player.rect.x < 550 and player.rect.y > 370 and player.rect.y < 430:
+                player.rect.x = 10;
+                player.rect.y = 10;
+                play = False
+                num_puerta = 5
+                text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
+            #cambio de posicion si se toma el portal verde, "GANASTE".
+            if player.rect.x > 560 and player.rect.y > 370 and player.rect.y < 430:
+                mensaje("chartreuse3",vidas,"¡Ganaste!")
+                current_room_no = 0
+                current_room = rooms[current_room_no]
+                player.rect.x = 154
+                player.rect.y = 450
+                play = False
+                
+                
+                            
+        if(play):  #permite movimiento del objeto controlado por la camara------------------------
             
             player.rect.x = red_validation_x  #toma el mvto de la camara
             player.rect.y = red_validation_y
@@ -393,56 +490,25 @@ while run:
                 print("done en true")
 
 
-        # Logica del juego, verifica las vidas
+        # Verificación de vidas-------------------------------------------------------------------
         copy = vidas
         vidas = player.move(current_room.wall_list,vidas)
         if(vidas < copy):
-            player.rect.x = 145
-            player.rect.y = 450
-            num_puerta = 0
+            if(current_room_no == 0):
+                player.rect.x = 145
+                player.rect.y = 450
+                num_puerta = 0  
+            if(current_room_no == 1):
+                player.rect.x = 10
+                player.rect.y = 10          
+                num_puerta = 3
             play = False
             if(vidas == 0):
                 mensaje("firebrick4",vidas,"Perdiste :(")
         text = font.render("Vidas: "+ str(vidas), True, (0, 255, 0))
 
-        #cambio de posicion si se toma el portal amarillo puerta 1.
-        if player.rect.x < 45 and player.rect.y > 430:
-            player.rect.x = 0;
-            player.rect.y = 200;
-            play = False
-            num_puerta = 1
-            text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
-            
-
-        #cambio de posicion si se toma el portal rosado puerta 2.
-        if player.rect.x > 230 and  player.rect.x < 300 and player.rect.y > 410:
-           player.rect.x = 550;
-           player.rect.y = 450;
-           play = False
-           num_puerta = 2
-           text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
-
-        #cambio de posicion si se toma el portal rosado puerta 3 vuelve al inicio.
-        if player.rect.x < 10  and player.rect.y < 10:
-           player.rect.x = 145;
-           player.rect.y = 450;
-           play = False
-           num_puerta = 0
-           text = font.render("Vidas: "+ str(vidas), True, (0, 150, 0))
-
-        #cambio de nivel
-        if player.rect.x > 550 and player.rect.y <60 :
-            if current_room_no == 0:
-                current_room_no = 1
-                current_room = rooms[current_room_no]
-                player.rect.x = 0
-                player.rect.y = 0
-                play = False
-                num_puerta = 3
-        #NIVEL 1: PUERTA 0(INICIO),1,2
-        #NIVEL 2: PUERTA 3(INICIO),4,5
-
-        # Dibuja la pantalla dependiendo del nivel
+           
+        # Dibuja la pantalla dependiendo del nivel--------------------------------------------------
         if(current_room_no == 0):
             screen.blit(background_image1, background_position)
             screen.blit(puerta1, [0,0])
@@ -463,9 +529,7 @@ while run:
             screen.blit(puerta2, [590,370])
             screen.blit(puerta2, [540,370])
 
-
-
-    
+   
         movingsprites.draw(screen)
         current_room.wall_list.draw(screen)
 
@@ -476,7 +540,7 @@ while run:
         clock.tick(60)
     break
 
-#Cierra el juego y sus ventanas.
+#Cierra el juego y sus ventanas.------------------------------------------------------------------
 pygame.quit()
 cap.release()
 cv2.destroyAllWindows()
